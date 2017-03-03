@@ -1,38 +1,48 @@
-var canvas = document.getElementById("thing");
-var ctx = canvas.getContext("2d");
-var width = canvas.width;
-var height = canvas.height;
-var clrBtn = document.getElementById("clearbtn");
+var svgImage = document.getElementById("svg");
+var width = parseInt(svgImage.getAttribute("width"));
+var height = parseInt(svgImage.getAttribute("height"));
 var circBtn = document.getElementById("circle");
 var dvdBtn = document.getElementById("dvd");
 var stopBtn = document.getElementById("stop");
 var mousex, mousey;
 var rid;
+
+var namespace = "http://www.w3.org/2000/svg";
+
 var img = new Image();
 img.src = "https://upload.wikimedia.org/wikipedia/en/thumb/1/18/Dvd-video-logo.svg/1280px-Dvd-video-logo.svg.png";
 
-canvas.addEventListener("mousemove", function(e) {
+svgImage.addEventListener("mousemove", function(e) {
     mousex = e.offsetX;
     mousey = e.offsetY;
 });
 
 
 var drawDVD = function(x,y, imgW, imgH){
-    ctx.drawImage(img, x, y, imgW, imgH);
+    var c = document.createElementNS(namespace, "image");
+    c.setAttribute("x", toString(x));
+    c.setAttribute("y", toString(y));
+    c.setAttribute("width", toString(imgW));
+    c.setAttribute("height", toString(imgH));
+    c.setAttributeNS('http://www.w3.org/1999/xlink','href','http://i.imgur.com/LQIsf.jpg');
+    svgImage.appendChild(c);
 }
 
 var circleAnim = function() {
-
     var x = 25;
     var increase = true;
     window.cancelAnimationFrame(rid);
-   
+    
     var drawDot = function(e){
-	ctx.clearRect(0, 0, width, height);
+	while (svgImage.hasChildNodes()){
+	    svgImage.removeChild(svgImage.lastChild);
+	}
 	console.log(rid);
-	ctx.beginPath();
-	ctx.arc(width/2, height/2, x, 0, 2 * Math.PI);
-	ctx.fill();
+	var circle = document.createElementNS(namespace, "circle")
+	circle.setAttribute("cx", "0");
+	circle.setAttribute("cy", "0");
+	circle.setAttribute("r", x.toString());
+	circle.setAttribute("fill", "black");
 	if (x >= 250) {
 	    increase = false;
 	}
